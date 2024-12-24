@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galactic - JavaScript Obfuscator</title>
+    <title>Galactic - JavaScript Deobfuscator</title>
     <style>
         /* Basic Styling */
         body {
@@ -102,11 +102,10 @@
     </style>
 </head>
 <body>
-    <h1>Galactic - JavaScript Obfuscator</h1>
-    <p>Transform and reverse your JavaScript code with cosmic precision!</p>
-    <textarea id="input" placeholder="Paste your JavaScript code here..."></textarea>
+    <h1>Galactic - JavaScript Deobfuscator</h1>
+    <p>Reverse your JavaScript code with cosmic precision!</p>
+    <textarea id="input" placeholder="Paste your obfuscated code here..."></textarea>
     <br>
-    <button onclick="obfuscate()">Obfuscate</button>
     <button onclick="deobfuscate()">Deobfuscate</button>
     <div id="outputContainer">
         <button id="copyButton" onclick="copyToClipboard()">Copy Result</button>
@@ -114,23 +113,6 @@
     </div>
 
     <script>
-        function obfuscate() {
-            const input = document.getElementById('input').value;
-            if (!input.trim()) {
-                alert('Please enter some code to obfuscate!');
-                return;
-            }
-
-            // Obfuscation: Encode characters into hexadecimal
-            let obfuscated = '';
-            for (const char of input) {
-                const hex = char.charCodeAt(0).toString(16).padStart(2, '0');
-                obfuscated += `\\x${hex}`;
-            }
-
-            displayOutput(obfuscated);
-        }
-
         function deobfuscate() {
             const input = document.getElementById('input').value;
             if (!input.trim()) {
