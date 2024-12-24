@@ -16,7 +16,6 @@
             overflow: hidden;
         }
 
-        /* Title and Text */
         h1 {
             font-size: 3rem;
             margin-top: 50px;
@@ -28,7 +27,6 @@
             margin: 10px auto;
         }
 
-        /* Textarea */
         textarea {
             width: 80%;
             height: 150px;
@@ -45,7 +43,6 @@
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* Buttons */
         button {
             padding: 15px 30px;
             margin: 10px;
@@ -64,21 +61,29 @@
             transform: scale(1.1);
         }
 
-        /* Output Display */
-        #output {
+        /* Scrollable Output Box */
+        #outputContainer {
             margin-top: 20px;
             width: 80%;
-            word-break: break-word;
+            max-height: 300px;
+            overflow-y: auto;
             background: rgba(0, 0, 0, 0.4);
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* Copy Button */
+        #output {
+            font-family: monospace;
+            white-space: pre-wrap;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        /* Copy Button at the Top */
         #copyButton {
             display: none;
-            margin-top: 10px;
+            margin-bottom: 10px;
             padding: 10px 20px;
             font-size: 16px;
             font-weight: bold;
@@ -88,6 +93,7 @@
             cursor: pointer;
             color: #ffffff;
             transition: background 0.3s ease;
+            float: right;
         }
 
         #copyButton:hover {
@@ -102,8 +108,10 @@
     <br>
     <button onclick="obfuscate()">Obfuscate</button>
     <button onclick="deobfuscate()">Deobfuscate</button>
-    <div id="output"></div>
-    <button id="copyButton" onclick="copyToClipboard()">Copy Result</button>
+    <div id="outputContainer">
+        <button id="copyButton" onclick="copyToClipboard()">Copy Result</button>
+        <pre id="output"></pre>
+    </div>
 
     <script>
         function obfuscate() {
@@ -113,7 +121,7 @@
                 return;
             }
 
-            // Obfuscation: Encode characters into hexadecimal including spaces and newlines
+            // Obfuscation: Encode characters into hexadecimal
             let obfuscated = '';
             for (const char of input) {
                 const hex = char.charCodeAt(0).toString(16).padStart(2, '0');
@@ -131,13 +139,11 @@
             }
 
             try {
-                // Regex to detect valid obfuscated sequences (\xNN)
                 const regex = /\\x([0-9a-fA-F]{2})/g;
                 let match;
                 let deobfuscated = '';
 
                 while ((match = regex.exec(input)) !== null) {
-                    // Convert each hex pair back to its character
                     const char = String.fromCharCode(parseInt(match[1], 16));
                     deobfuscated += char;
                 }
