@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic - JavaScript Obfuscator</title>
+    <style>
+        /* Basic Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #000428, #004e92);
+            color: #ffffff;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Title and Text */
+        h1 {
+            font-size: 3rem;
+            margin-top: 50px;
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin: 10px auto;
+        }
+
+        /* Textarea */
+        textarea {
+            width: 80%;
+            height: 150px;
+            margin: 20px auto;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            resize: none;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Buttons */
+        button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            background: #ff5722;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: #ff784e;
+            transform: scale(1.1);
+        }
+
+        /* Output Display */
+        #output {
+            margin-top: 20px;
+            width: 80%;
+            word-break: break-word;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Copy Button */
+        #copyButton {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background: #00c853;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: background 0.3s ease;
+        }
+
+        #copyButton:hover {
+            background: #5efc82;
+        }
+    </style>
+</head>
+<body>
+    <h1>Galactic - JavaScript Obfuscator</h1>
+    <p>Transform and reverse your JavaScript code with cosmic precision!</p>
+    <textarea id="input" placeholder="Paste your JavaScript code here..."></textarea>
+    <br>
+    <button onclick="obfuscate()">Obfuscate</button>
+    <button onclick="deobfuscate()">Deobfuscate</button>
+    <div id="output"></div>
+    <button id="copyButton" onclick="copyToClipboard()">Copy Result</button>
+
+    <script>
+        function obfuscate() {
+            const input = document.getElementById('input').value;
+            if (!input.trim()) {
+                alert('Please enter some code to obfuscate!');
+                return;
+            }
+
+            // Obfuscation: Encode characters into hexadecimal including spaces and newlines
+            let obfuscated = '';
+            for (const char of input) {
+                const hex = char.charCodeAt(0).toString(16).padStart(2, '0');
+                obfuscated += `\\x${hex}`;
+            }
+
+            displayOutput(obfuscated);
+        }
+
+        function deobfuscate() {
+            const input = document.getElementById('input').value;
+            if (!input.trim()) {
+                alert('Please enter obfuscated code to deobfuscate!');
+                return;
+            }
+
+            try {
+                // Regex to detect valid obfuscated sequences (\xNN)
+                const regex = /\\x([0-9a-fA-F]{2})/g;
+                let match;
+                let deobfuscated = '';
+
+                while ((match = regex.exec(input)) !== null) {
+                    // Convert each hex pair back to its character
+                    const char = String.fromCharCode(parseInt(match[1], 16));
+                    deobfuscated += char;
+                }
+
+                if (!deobfuscated) {
+                    alert('No valid obfuscated sequences found!');
+                    return;
+                }
+
+                displayOutput(deobfuscated);
+            } catch (error) {
+                alert('Error during deobfuscation! Please check your input.');
+            }
+        }
+
+        function displayOutput(result) {
+            const outputDiv = document.getElementById('output');
+            const copyButton = document.getElementById('copyButton');
+            outputDiv.textContent = result;
+            outputDiv.style.display = 'block';
+            copyButton.style.display = 'inline-block';
+        }
+
+        function copyToClipboard() {
+            const outputDiv = document.getElementById('output');
+            navigator.clipboard.writeText(outputDiv.textContent).then(() => {
+                alert('Result copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
